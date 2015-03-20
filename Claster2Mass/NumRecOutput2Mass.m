@@ -12,150 +12,167 @@ function [ m ] = NumRecOutput2Mass( corr, halfNumCount, pComplete )
 %           
 %   Output:  -m vector, containing the masses for the banknotes
 
-m = zeros(1, 64);
 mConf1 = zeros(1, 64);
 
-k = 1;
 pNotComplete = 1- pComplete;
 corr0 = corr(4);
 corr1 = corr(1);
 corr2 = corr(2);
 corr5 = corr(3);
+maxCorr = max(corr);
 
 
-if(halfNumCount <= 4)
+%1, 2, 5, 0 OR 10, 20, 50, 00
+if(halfNumCount <= 2)
+    
+    %1, 2, 5, 0 OR 10, 20, 50, 00
+    if(halfNumCount == 2 && pNotComplete > 0)
+        m(15) = corr1 * pComplete; %1 - m(1000,10000)
+        m(19) = corr2 * pComplete; %2 - m(2000, 20000)
+        m(10) = corr5 * pComplete; %5 - m(500, 5000)
+        m(64) = corr0 * pComplete; %0 - m(ALL)
+        
+        
+        m(15) = corr1 * pNotComplete; %10 - m(1000, 10000)
+        m(19) = corr2 * pNotComplete; %20 - m(2000, 20000)
+        m(10) = corr5 * pNotComplete; %50 - m(500, 5000)
+        
+        %Meg johetne, hogy 500-asnal pont 2 db 0 van
+        m(64) = corr0 * pNotComplete; %00
+        
+        %Itt kene meg sulyozni a maxCorr-ral??
+        
+    %1, 2, 5, 0
+    else
+        m(15) = corr1; %1 - m(1000, 10000)
+        m(19) = corr2; %2 - m(2000, 20000)
+        m(10) = corr5; %5 - m(500, 5000)
+        m(64) = corr0; %0 - m(ALL)
+        
+        %Itt kene meg sulyozni a maxCorr-ral??
+        
+    end;
+    %Vegen majd kiemelni ide kozoseket
+    m = m / sum(m);
+
+    
+%10, 20, 50, 00  OR  100, 200, 500, 000
+elseif(halfNumCount > 2 && halfNumCount <= 4)
+    
     %10, 20, 50, 00  OR  100, 200, 500, 000
     if(halfNumCount == 4 && pNotComplete > 0)
-        mConf1(2) = (1 - corr0 * k) * pComplete * corr5; %500 - 50
-        mConf1(3) = (1 - corr0 * k) * pComplete * corr1; %1000 - 10
-        mConf1(4) = (1 - corr0 * k) * pComplete * corr2; %2000 - 20
-        mConf1(5) = (1 - corr0 * k) * pComplete * corr5; %5000 - 50
-        mConf1(6) = (1 - corr0 * k) * pComplete * corr1; %10000 - 10
-        mConf1(7) = (1 - corr0 * k) * pComplete * corr1; %20000 - 20
+        m(15) = corr1 * pComplete; %10 - m(1000, 10000)
+        m(19) = corr2 * pComplete; %20 - m(2000, 20000)
+        m(10) = corr5 * pComplete; %50 - m(500, 5000)
         
-        %/2
-        mConf1(2) = mConf1(2) + (1 - corr0 * k) * pNotComplete * corr5; %500 - 500
-        
-        mConf1(3) = mConf1(3) + (1 - corr0 * k) * pNotComplete * corr1; %1000 - 100
-        mConf1(4) = mConf1(4) + (1 - corr0 * k) * pNotComplete * corr2; %2000 - 200
-        mConf1(5) = mConf1(5) + (1 - corr0 * k) * pNotComplete * corr5; %5000 - 500
-        mConf1(6) = mConf1(6) + (1 - corr0 * k) * pNotComplete * corr1; %10000 - 100
-        mConf1(7) = mConf1(7) + (1 - corr0 * k) * pNotComplete * corr2; %20000 - 200
+        %Meg johetne, hogy 500-asnal pont 2 db 0 van
+        m(64) = corr0 * pComplete; %00
         
         
-        %/3
-        mConf1(3) = mConf1(3) + (corr0 * k) * pNotComplete; %1000 - 000
-        mConf1(4) = mConf1(4) + (corr0 * k) * pNotComplete; %2000 - 000
-        mConf1(5) = mConf1(5) + (corr0 * k) * pNotComplete; %5000 - 000
-        mConf1(6) = mConf1(6) + (corr0 * k) * pNotComplete; %10000 - 000
-        mConf1(7) = mConf1(7) + (corr0 * k) * pNotComplete; %20000 - 000
+        m(15) = corr1 * pNotComplete; %100 - m(1000, 10000)
+        m(19) = corr2 * pNotComplete; %200 - m(2000, 20000)
+        m(1) = corr5 * pNotComplete; %500 - m(500)
+        m(10) = corr5 * pNotComplete; %500 - m(500, 5000)
         
-        mConf1(64) = (corr0 * k) * pComplete; %{} - 00
+        %Meg johetne, hogy ezreseknel pont 3 db 0 van
+        m(63) = corr0 * pNotComplete; %000
         
+        %Itt kene meg sulyozni a maxCorr-ral??
         
-        
-        
-        mConf1 = mConf1 / sum(mConf1);
-        m = Claster2Mass(mConf1, max(corr));
     %10, 20, 50, 00 
     else
-        mConf1(2) = (1 - corr0 * k) * corr5; %500 - 50
-        mConf1(3) = (1 - corr0 * k) * corr1; %1000 - 10
-        mConf1(4) = (1 - corr0 * k) * corr2; %2000 - 20
-        mConf1(5) = (1 - corr0 * k) * corr5; %5000 - 50
-        mConf1(6) = (1 - corr0 * k) * corr1; %10000 - 10
-        mConf1(7) = (1 - corr0 * k) * corr2; %20000 - 20
+        m(15) = corr1; %10 - (1000, 10000)
+        m(19) = corr2; %20 - (2000, 20000)
+        m(10) = corr5; %50 - (500, 5000)
         
-        mConf1(64) = (corr0 * k); %{} - 00
+        %Meg johetne, hogy 500-asnal pont 2 db 0 van
+        m(64) = corr0; %00 - (ALL)
         
-        mConf1 = mConf1 / sum(mConf1);
-        m = Claster2Mass(mConf1, max(corr));
+        %Itt kene meg sulyozni a maxCorr-ral??
+        
     end;
-    
+    %Vegen majd kiemelni ide kozoseket
+    m = m / sum(m);
 
+    
 elseif (halfNumCount > 4 && halfNumCount <= 6)
-    %(100, 200, 500,) 000  OR  1000, 2000, 5000, 0000
+    %100, 200, 500 000  OR  1000, 2000, 5000, 0000
     if(halfNumCount == 6 && pNotComplete > 0)
-        mConf1(3) = (1 - corr0 * k) * pNotComplete; %1000
-        mConf1(4) = (1 - corr0 * k) * pNotComplete; %2000
-        mConf1(5) = (1 - corr0 * k) * pNotComplete; %5000
-        mConf1(6) = (corr0 * k) * pNotComplete; %10000
-        mConf1(7) = (corr0 * k) * pNotComplete; %20000
+        m(15) = corr1 * pComplete; %100 - m(1000, 10000)
+        m(19) = corr2 * pComplete; %200 - m(2000, 20000)
+        m(1) = corr5 * pComplete; %500 - m(500)
+        m(10) = corr5 * pComplete; %500 - m(500, 5000)
         
-        mConf1(2) = (1 - corr0 * k) * pComplete; %500
-        mConf1(3) = mConf1(3) + (corr0 * k) * pComplete; %1000
-        mConf1(4) = mConf1(4) + (corr0 * k) * pComplete; %2000
-        mConf1(5) = mConf1(5) + (corr0 * k) * pComplete; %5000
-        mConf1(6) = mConf1(6) + (corr0 * k) * pComplete; %10000
-        mConf1(7) = mConf1(7) + (corr0 * k) * pComplete; %20000
+        %Meg johetne, hogy ezreseknel pont 3 db 0 van
+        m(63) = corr0 * pComplete; %000 - m(1000, 2000, 5000, 10000, 20000)
         
-        mConf1(3) = mConf1(3) / 2; %1000
-        mConf1(4) = mConf1(4) / 2; %2000
-        mConf1(5) = mConf1(5) / 2; %5000
-        mConf1(6) = mConf1(6) / 2; %10000
-        mConf1(7) = mConf1(7) / 2; %20000
-
-        mConf1(2:7) = mConf1(2:7) / sum(mConf1(2:7));
-        maxConf = max(mConf1);
-        m = Claster2Mass(mConf1, maxConf);
         
-    %(100, 200,) 500, 000
+        m(2) = corr1 * pNotComplete; %1000 - m(1000)
+        m(15) = corr1 * pNotComplete; %1000 - m(1000, 10000)
+        m(3) = corr2 * pNotComplete; %2000 - m(2000)
+        m(19) = corr2 * pNotComplete; %2000 - m(2000, 20000)
+        m(4) = corr5 * pNotComplete; %5000 - m(5000)
+        
+        m(22) = corr0 * pNotComplete; %0000 - m(10000, 20000)
+        
+        %Itt kene meg sulyozni a maxCorr-ral??
+        
+    %100, 200 500, 000
     else
-        mConf1(2) = 1 - corr0 * k; %500
-        mConf1(3) = corr0 * k; %1000
-        mConf1(4) = corr0 * k; %2000
-        mConf1(5) = corr0 * k; %5000
-        mConf1(6) = corr0 * k; %10000
-        mConf1(7) = corr0 * k; %20000
+        m(15) = corr1; %100 - m(1000, 10000)
+        m(19) = corr2; %200 - m(2000, 20000)
+        m(1) = corr5; %500 - m(500)
+        m(10) = corr5; %500 - m(500, 5000)
         
-        mConf1(2:7) = mConf1(2:7) / sum(mConf1(2:7));
-        maxConf = max(mConf1);
-        m = Claster2Mass(mConf1, maxConf);
+        %Meg johetne, hogy ezreseknel pont 3 db 0 van
+        m(63) = corr0; %000 - m(1000, 2000, 5000, 10000, 20000)
+        
+        %Itt kene meg sulyozni a maxCorr-ral??
+        
     end;
-
+    %Vegen majd kiemelni ide kozoseket
+    m = m / sum(m);
     
 
+%1000, 2000, 5000, 0000  OR  10000, 20000
 elseif(halfNumCount > 6 && halfNumCount <= 8)
+    
     %1000, 2000, 5000, 0000  OR  10000, 20000
     if(halfNumCount == 8 && pNotComplete > 0)
-        mConf1(3) = (1 - corr0 * k) * pNotComplete; %1000
-        mConf1(4) = (1 - corr0 * k) * pNotComplete; %2000
-        mConf1(5) = (1 - corr0 * k) * pNotComplete; %5000
-        mConf1(6) = (corr0 * k) * pNotComplete; %10000
-        mConf1(7) = (corr0 * k) * pNotComplete; %20000
+        m(15) = corr1 * pComplete; %1000 - m(1000, 10000)
+        m(19) = corr2 * pComplete; %2000 - m(2000, 20000)
+        m(4) = corr5 * pComplete; %5000 - m(5000)   
+        m(22) = corr0 * pComplete; %0000 - m(10000, 20000)
+         
+        m(6) = corr1 * pNotComplete; %10000 - m(1000)
+        m(7) = corr2 * pNotComplete; %20000 - m(2000)
         
-        mConf1(6) = mConf1(6) + (1 - corr0 * k) * pComplete; %10000
-        mConf1(7) = mConf1(7) + (1 - corr0 * k) * pComplete; %20000
-        
-        mConf1(6) = mConf1(6) / 2; %10000
-        mConf1(7) = mConf1(7) / 2; %20000
-        
-        mConf1(3:7) = mConf1(3:7) / sum(mConf1(3:7));
-        maxConf = max(mConf1);
-        m = Claster2Mass(mConf1, maxConf);
+        %Itt kene meg sulyozni a maxCorr-ral??
         
     %1000, 2000, 5000, 0000
     else
-        mConf1(3) = 1 - corr0 * k; %1000
-        mConf1(4) = 1 - corr0 * k; %2000
-        mConf1(5) = 1 - corr0 * k; %5000
-        mConf1(6) = corr0 * k; %10000
-        mConf1(7) = corr0 * k; %20000
+        m(15) = corr1; %1000 - m(1000, 10000)
+        m(19) = corr2; %2000 - m(2000, 20000)
+        m(4) = corr5; %5000 - m(5000)   
+        m(22) = corr0; %0000 - m(10000, 20000)
         
-        mConf1(3:7) = mConf1(3:7) / sum(mConf1(3:7));
-        maxConf = max(mConf1);
-        m = Claster2Mass(mConf1, maxConf);
+        %Itt kene meg sulyozni a maxCorr-ral??
     end;
+    
+    %Vegen majd kiemelni ide kozoseket
+    m = m / sum(m);
+    
    
 %10000, 20000       
 else
-    mConf1(6) = 1 - corr0 * k; %10000
-    mConf1(7) = 1 - corr0 * k; %20000
+    m(6) = corr1; %10000 - m(1000)
+    m(7) = corr2; %20000 - m(2000)
+        
+    %Itt kene meg sulyozni a maxCorr-ral??
     
-    mConf1(6:7) = mConf1(6:7) / sum(mConf1(6:7));
-    maxConf = max(mConf1);
-    m = Claster2Mass(mConf1, maxConf);
+    m = m / sum(m);
 end;
+
 
 end
 
