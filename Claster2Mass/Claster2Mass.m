@@ -74,7 +74,7 @@ else
     m(58:63) = m(58:63)*conf*negConf*negConf*negConf*negConf;
     
     %6 elements, could be written like this also: negConf*negConf*negConf*negConf*negConf
-    m(64) = (mConf1(2) + mConf1(3) + mConf1(4) + mConf1(5)+ mConf1(6)+ mConf1(7))*negConf*negConf*negConf*negConf*negConf;   
+    m(64) = mConf1(64) * conf + negConf*negConf*negConf*negConf*negConf;   
 end;
 
 end
