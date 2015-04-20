@@ -38,7 +38,7 @@ if(relDist < 1)
     m(128) = (1 - m_certain) * (1 - m_certain);
 else
     %m(not banknote)
-    m(7) = 1- m_certain;
+    m(8) = 1- m_certain;
     %m(banknotes, not banknote)
     m(128) = m_certain;
 end;
