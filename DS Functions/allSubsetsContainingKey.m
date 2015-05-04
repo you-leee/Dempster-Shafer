@@ -13,13 +13,7 @@ b = cell(0);
 index = 1;
 
 for i=1:length(A)
-    isSubset = 0;
-    for j=1:length(key)
-        if (not(isempty(strfind(A{i},key(j)))))
-            isSubset = 1;
-        end;
-    end;
-    if (isSubset)
+    if(not(isempty(intersect(A{i},key))))
         b{index} = A{i};
         index = index + 1;
     end;
