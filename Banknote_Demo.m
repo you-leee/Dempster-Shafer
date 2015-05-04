@@ -104,11 +104,12 @@ for i = 1:7
     M_color = ColorOutput2Mass(RelDistColor(i,:),IDsColor(i,:),Keys);
 
     tmp1 = GPA(M_color, M_pattern);
-    tmp2 = m_DS(tmp1);
+    tmp2 = m_Y(tmp1);
     tmp3 = GPA(tmp2, M_number);
-    M_combi = m_DS(tmp3);
+    M_combi = m_Y(tmp3);
     
     if(sum(cell2mat(values(M_combi))) ~= 1)
+        warning('The sum of the masses is not 1, it is: %d', sum(cell2mat(values(M_combi))))
         m_values = cell2mat(values(M_combi));
         m_keys = keys(M_combi);
         m_values = m_values / sum(m_values);
