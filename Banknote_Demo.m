@@ -104,11 +104,11 @@ for i = 1:7
     M_color = ColorOutput2Mass(RelDistColor(i,:),IDsColor(i,:),Keys);
 
     tmp1 = GPA(M_color, M_pattern);
-    tmp2 = m_Y(tmp1);
+    tmp2 = m_DS(tmp1);
     tmp3 = GPA(tmp2, M_number);
-    M_combi = m_Y(tmp3);
+    M_combi = m_DS(tmp3);
     
-    if(sum(cell2mat(values(M_combi))) ~= 1)
+    if(sum(cell2mat(values(M_combi))) ~= 1.0)
         warning('The sum of the masses is not 1, it is: %d', sum(cell2mat(values(M_combi))))
         m_values = cell2mat(values(M_combi));
         m_keys = keys(M_combi);
@@ -117,7 +117,7 @@ for i = 1:7
     end;
 
 
-    fprintf('\nEset: %s', Messages{i});
+    fprintf('\nEset: %s', strcat(num2str(i), '  ', Messages{i}));
     fprintf('\n')
     fprintf('Mass\n')
     fprintf(' 500      1000     2000     5000     10000    20000    Negative Banknote ALL\n')
@@ -125,7 +125,7 @@ for i = 1:7
 
     bel = belief(M_combi);
     fprintf('\n')
-    fprintf('Belief and Plausibility\n')
+    fprintf('Belief, Plausibility and probability(from plaus and from mass)\n')
     fprintf(' 500      1000     2000     5000     10000    20000    Negative\n')
     fprintf('% f', bel('1'), bel('2'), bel('3'), bel('4'), bel('5'), bel('6'), bel('7'))
 
@@ -133,4 +133,28 @@ for i = 1:7
     fprintf('\n')
     fprintf('% f', plaus('1'), plaus('2'), plaus('3'), plaus('4'), plaus('5'), plaus('6'), plaus('7'))
     fprintf('\n')
+    
+    P_pignistic = P_m(M_combi);
+    P_plaus = P_pl(plaus);
+    fprintf('\n')
+    fprintf('% f', P_plaus('1'), P_plaus('2'), P_plaus('3'), P_plaus('4'), P_plaus('5'), P_plaus('6'), P_plaus('7'))
+    fprintf('\n')
+    fprintf('% f', P_pignistic('1'), P_pignistic('2'), P_pignistic('3'), P_pignistic('4'), P_pignistic('5'), P_pignistic('6'), P_pignistic('7'))
+    fprintf('\n')
+    
+    
+    o500o = [M_combi('1'); bel('1'); plaus('1'); P_pignistic('1'); P_plaus('1')];
+    o1000o = [M_combi('2'); bel('2'); plaus('2'); P_pignistic('2'); P_plaus('2')];
+    o2000o = [M_combi('3'); bel('3'); plaus('3'); P_pignistic('3'); P_plaus('3')];
+    o5000o = [M_combi('4'); bel('4'); plaus('4'); P_pignistic('4'); P_plaus('4')];
+    o10000o = [M_combi('5'); bel('5'); plaus('5'); P_pignistic('5'); P_plaus('5')];
+    o20000o = [M_combi('6'); bel('6'); plaus('6'); P_pignistic('6'); P_plaus('6')];
+    Negative = [M_combi('7'); bel('7'); plaus('7'); P_pignistic('7'); P_plaus('7')];
+    Banknote = [M_combi('123456'); bel('123456'); plaus('123456'); -666; -666];
+    All = [M_combi('1234567'); bel('1234567'); plaus('1234567'); -666; -666];
+    
+    file = strcat('experiment', num2str(i), '.xls');
+    T = table(o500o, o1000o, o2000o, o5000o, o10000o, o20000o, Negative, Banknote, All, 'RowNames', {'Combined mass'; 'Belief'; 'Plausibility'; 'Probability with pignistic transformation'; 'Probability with plausibility transformation'});
+    
+    writetable(T,file,'WriteRowNames',true)
 end;
