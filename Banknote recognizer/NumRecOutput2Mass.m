@@ -57,8 +57,6 @@ t1 = t(2);
 t2 = t(3);
 t5 = t(1);
 
-maxCorr = max(corr);
-
 m = containers.Map(Keys,zeros(1, 128));
 
 
@@ -132,9 +130,11 @@ else
     m('5') = corr1; %10000 - m(1000)
     m('6') = corr2; %20000 - m(2000)
 end;
+
+max_m = max(cell2mat(values(m)));
     
-m('123456') = (1 - maxCorr) * maxCorr; %m(banknote)
-m('1234567') = (1 - maxCorr) * (1 - maxCorr); % m(all)
+m('123456') = (1 - max_m) * max_m; %m(banknote)
+m('1234567') = (1 - max_m) * (1 - max_m); % m(all)
 
 m_keys = keys(m);
 m_values = cell2mat(values(m));

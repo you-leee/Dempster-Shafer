@@ -117,7 +117,7 @@ for i = 1:7
     end;
 
 
-    fprintf('\nEset: %s', strcat(num2str(i), '  ', Messages{i}));
+    fprintf('\nEset %s', strcat(num2str(i), ':', Messages{i}));
     fprintf('\n')
     fprintf('Mass\n')
     fprintf(' 500      1000     2000     5000     10000    20000    Negative Banknote ALL\n')

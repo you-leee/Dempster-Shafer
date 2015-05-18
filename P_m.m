@@ -13,7 +13,7 @@ index = 1;
 
 for i = 2:length(Keys)
     if length(Keys{i}) == 1
-        tmpKeys = allSubsetsElementsOfKey(Keys, Keys{i});
+        tmpKeys = allSubsetsContainingKey(Keys, Keys{i});
         single_keys{index} = Keys{i};
         for j = 1:length(tmpKeys)
             P_m(index) = P_m(index) + m(tmpKeys{j})/length(tmpKeys{j});

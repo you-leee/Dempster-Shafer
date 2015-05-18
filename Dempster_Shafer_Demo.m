@@ -10,9 +10,9 @@ single_key = {'1','2','3'};
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Situation 1: Little conflict and little ignorance
 m_ci_1 = [0,0.85,0.05,0,0,0,0,0.1];
-P_ci_1 = P_pl(key,m_ci_1);
+P_ci_1 = P_pl_m(key,m_ci_1);
 m_ci_2 = [0,0.85,0.1,0,0,0,0,0.05];
-P_ci_2 = P_pl(key,m_ci_2);
+P_ci_2 = P_pl_m(key,m_ci_2);
 values(P_ci_1);
 values(P_ci_2);
 
@@ -62,9 +62,9 @@ m_U_ext_ci = values(m_U_ext(q_ci));
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Situation 2: Little conflict and big ignorance
 mcI_1 = [0,0.2,0,0,0,0,0,0.8];
-P_cI_1 = P_pl(key,mcI_1);
+P_cI_1 = P_pl_m(key,mcI_1);
 mcI_2 = [0,0,0.15,0,0,0,0,0.85];
-P_cI_2 = P_pl(key,mcI_2);
+P_cI_2 = P_pl_m(key,mcI_2);
 values(P_cI_1);
 values(P_cI_2);
 
@@ -113,9 +113,9 @@ m_U_ext_cI = values(m_U_ext(q_cI));
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Situation 3: Big conflict and little ignorance
 mCi_1 = [0,0.85,0.05,0,0,0,0,0.1];
-P_Ci_1 = P_pl(key,mCi_1);
+P_Ci_1 = P_pl_m(key,mCi_1);
 mCi_2 = [0,0.1,0,0.8,0,0,0,0.1];
-P_Ci_2 = P_pl(key,mCi_2);
+P_Ci_2 = P_pl_m(key,mCi_2);
 values(P_Ci_1);
 values(P_Ci_2);
 
@@ -167,9 +167,9 @@ m_U_ext_Ci = values(m_U_ext(q_Ci));
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Situation 4:Relative big conflict and relative big ignorance
 mrCrI_1 = [0,0.55,0.05,0,0,0,0,0.4];
-P_rCrI_1 = P_pl(key,mrCrI_1);
+P_rCrI_1 = P_pl_m(key,mrCrI_1);
 mrCrI_2 = [0,0,0,0.45,0,0,0,0.55];
-P_rCrI_2 = P_pl(key,mrCrI_2);
+P_rCrI_2 = P_pl_m(key,mrCrI_2);
 values(P_rCrI_1);
 values(P_rCrI_2);
 
@@ -216,7 +216,6 @@ bel_DS_rCrI = values(belief(containers.Map(keys(q_rCrI),m_DS_rCrI)))
 pl_DS_rCrI = values(plausibility(containers.Map(keys(q_rCrI),m_DS_rCrI)))
 m_Y_rCrI = values(m_Y(q_rCrI));
 m_U_ext_rCrI = values(m_U_ext(q_rCrI));
-
 
 
 

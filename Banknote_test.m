@@ -166,31 +166,88 @@
 
 
 clear all;
-load('keys.mat')
-t = [0.5, 0.5, 0.5];
+% load('keys.mat')
+% t = [0.5, 0.5, 0.5];
+% 
+% M_color = ColorOutput2Mass([0.4, 0.1],[1, 4],Keys);
+% M_pattern = PatternOutput2Mass(0.3, 1, Keys);
+% M_number = NumRecOutput2Mass([0.01, 0.01, 0.01, 0.2], 7, 0.5, t, Keys);
+% 
+% tmp1 = GPA(M_color, M_pattern);
+% tmp2 = m_DS(tmp1);
+% tmp3 = GPA(tmp2, M_number);
+% M_combi = m_DS(tmp3);
+% 
+% if(sum(cell2mat(values(M_combi))) ~= 1.0)
+%     warning('The sum of the masses is not 1, it is: %d', sum(cell2mat(values(M_combi))))
+%     m_values = cell2mat(values(M_combi));
+%     m_keys = keys(M_combi);
+%     m_values = m_values / sum(m_values);
+%     M_combi = containers.Map(m_keys,m_values);
+% end;
+% 
+% fprintf('Mass\n')
+% fprintf(' 500      1000     2000     5000     10000    20000    Negative  Banknote   ALL\n')
+% fprintf('% f', M_combi('1'), M_combi('2'), M_combi('3'), M_combi('4'), M_combi('5'), M_combi('6'), M_combi('7'), M_combi('123456'), M_combi('1234567'))
+% 
+% bel = belief(M_combi);
+% fprintf('\n')
+% fprintf('Belief, Plausibility\n')
+% fprintf(' 500      1000     2000     5000     10000    20000    Negative\n')
+% fprintf('% f', bel('1'), bel('2'), bel('3'), bel('4'), bel('5'), bel('6'), bel('7'))
+% fprintf('\n')
+%     
+% plaus = plausibility(M_combi);
+% fprintf('% f', plaus('1'), plaus('2'), plaus('3'), plaus('4'), plaus('5'), plaus('6'), plaus('7'))
+% fprintf('\n')
+% 
+% P_plaus = P_pl(plaus);
+% P_pignistic = P_m(M_combi);
+% fprintf('\n')
+% fprintf('Probabilities(plaus and pignistic)\n')
+% fprintf('% f', P_plaus('1'), P_plaus('2'), P_plaus('3'), P_plaus('4'), P_plaus('5'), P_plaus('6'), P_plaus('7'))
+% fprintf('\n')
+% fprintf('% f', P_pignistic('1'), P_pignistic('2'), P_pignistic('3'), P_pignistic('4'), P_pignistic('5'), P_pignistic('6'), P_pignistic('7'))
+% fprintf('\n')
 
-M_color = ColorOutput2Mass([1.2, 0.3, 0.9, 0.9],[1, 2, 3, 6],Keys);
-M_pattern = PatternOutput2Mass(1.4, 2, Keys);
-M_number = NumRecOutput2Mass([0.1, 0.8, 0.1, 0.1], 8, 1, t, Keys);
+Keys = {'0', '1', '2', '3', '12', '13', '23', '123'};
+M_11 = [0, 0.1, 0.1, 0.3, 0.5, 0, 0, 0];
+P_11 = P_pl_m(Keys, M_11);
+M_12 = [0, 0.4, 0.1, 0, 0.2, 0, 0.3, 0];
+P_12 = P_pl_m(Keys, M_12);
 
-tmp1 = GPA(M_color, M_pattern);
-tmp2 = m_DS(tmp1);
-tmp3 = GPA(tmp2, M_number);
-M_combi = m_DS(tmp3);
+M_21 = [0, 0.9, 0, 0, 0, 0, 0, 0.1];
+P_21 = P_pl_m(Keys, M_21);
+M_22 = [0, 0, 1, 0, 0, 0, 0, 0];
+P_22 = P_pl_m(Keys, M_22);
+
+% M_combi = containers.Map(Keys,M_12);%m_U_ext(GPA(containers.Map(Keys,M_11), containers.Map(Keys,M_12)));
+% values(P_11)
+% values(P_12)
+
+M_combi = m_U_ext(GPA(containers.Map(Keys,M_21), containers.Map(Keys,M_22)));
+values(P_21)
+values(P_22)
 
 fprintf('Mass\n')
-fprintf(' 500      1000     2000     5000     10000    20000    Negative  Banknote   ALL\n')
-fprintf('% f', M_combi('1'), M_combi('2'), M_combi('3'), M_combi('4'), M_combi('5'), M_combi('6'), M_combi('7'), M_combi('123456'), M_combi('1234567'))
+fprintf(' 1        2       3       ALL\n')
+fprintf('% f', M_combi('1'), M_combi('2'), M_combi('3'), M_combi('123'))
 
 bel = belief(M_combi);
 fprintf('\n')
-fprintf('Belief and Plausibility\n')
-fprintf(' 500      1000     2000     5000     10000    20000    Negative\n')
-fprintf('% f', bel('1'), bel('2'), bel('3'), bel('4'), bel('5'), bel('6'), bel('7'))
+fprintf('Belief, Plausibility\n')
+fprintf('% f', bel('1'), bel('2'), bel('3'))
+fprintf('\n')
     
 plaus = plausibility(M_combi);
-fprintf('\n')
-fprintf('% f', plaus('1'), plaus('2'), plaus('3'), plaus('4'), plaus('5'), plaus('6'), plaus('7'))
+fprintf('% f', plaus('1'), plaus('2'), plaus('3'))
 fprintf('\n')
 
-
+P_plaus = P_pl(plaus);
+P_pignistic = P_m(M_combi);
+fprintf('\n')
+fprintf('Probabilities(plaus and pignistic)\n')
+fprintf('% f', P_plaus('1'), P_plaus('2'), P_plaus('3'))
+fprintf('\n')
+fprintf('% f', P_pignistic('1'), P_pignistic('2'), P_pignistic('3'))
+fprintf('\n')
