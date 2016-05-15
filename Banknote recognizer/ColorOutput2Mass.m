@@ -21,10 +21,13 @@ if(min_relDist >= 1)
     normDivider = len;
     for i = 1:len
         if(relDist(i) ~= 1)
-            m_certain = normpdf(relDist(i), 0, max_norm);
+            m_certain = (cos(relDist(i).*pi/2)+normpdf(relDist(i),0,max_norm))/2;
+            if(m_certain < 0)
+                m_certain = -1 * m_certain;
+            end;
             
             %m(not banknote)
-            m('7') = m('7') + 1- m_certain;
+            m('7') = m('7') + 1 - m_certain;
             %m(banknotes, not banknote)
             m('1234567') = m('1234567') + m_certain;
         else
@@ -59,19 +62,19 @@ else
         [max_relDist, max_index] = max(pos_relDists);
         
         if(i == 1)
-            m_certain = normpdf(max_relDist, 0, max_norm);
-            m_certain_sum = m_certain_sum + m_certain;
+            m_certain = (cos(max_relDist.*pi/2)+normpdf(max_relDist,0,max_norm))/2;
+            m_certain_sum = m_certain;
             if(index == 2)
                 m_max = m_certain;
             end;
         else
             if(i == index - 1)
-                m_new_certain = normpdf(max_relDist, 0, max_norm);
+                m_new_certain = (cos(max_relDist.*pi/2)+normpdf(max_relDist,0,max_norm))/2;
                 m_certain = m_new_certain - m_certain_sum;
                 m_max = m_new_certain;
             else
-                m_certain = normpdf(max_relDist, 0, max_norm) - m_certain_sum;
-                m_certain_sum = m_certain_sum + m_certain;
+                m_certain = (cos(max_relDist.*pi/2)+normpdf(max_relDist,0,max_norm))/2 - m_certain_sum;
+                m_certain_sum = m_certain;
             end;
         end;
 

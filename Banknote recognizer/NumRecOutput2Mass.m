@@ -21,35 +21,39 @@ x_norm = (0:.001:2);
 max_norm = max(normpdf(x_norm));
 
 if(corr(1) == 1)
-    corr0 = 1;
+    corr1 = 1;
 elseif(corr(1) == 0)
-    corr0 = 0;
+    corr1 = 0;
 else
-    corr0 = normpdf(corr(1), 1, max_norm);
+    %corr1 = normpdf(corr(1), 1, max_norm);
+    corr1 = (sin(corr(1).*pi/2)+normpdf(corr(1),1,max_norm))/2;
 end;
 
 if(corr(2) == 1)
-    corr1 = 1;
+    corr2 = 1;
 elseif(corr(2) == 0)
-    corr1 = 0;
+    corr2 = 0;
 else
-    corr1 = normpdf(corr(2), 1, max_norm);
+    %corr2 = normpdf(corr(2), 1, max_norm);
+    corr2 = (sin(corr(2).*pi/2)+normpdf(corr(2),1,max_norm))/2;
 end;
 
 if(corr(3) == 1)
-    corr2 = 1;
+    corr5 = 1;
 elseif(corr(3) == 0)
-    corr2 = 0;
+    corr5 = 0;
 else
-    corr2 = normpdf(corr(3), 1, max_norm);
+    %corr5 = normpdf(corr(3), 1, max_norm);
+    corr5 = (sin(corr(3).*pi/2)+normpdf(corr(3),1,max_norm))/2;
 end;
 
 if(corr(4) == 1)
-    corr5 = 1;
+    corr0 = 1;
 elseif(corr(4) == 0)
-    corr5 = 0;
+    corr0 = 0;
 else
-    corr5 = normpdf(corr(4), 1, max_norm);
+    %corr0 = normpdf(corr(4), 1, max_norm);
+    corr0 = (sin(corr(4).*pi/2)+normpdf(corr(4),1,max_norm))/2;
 end;
 
 
@@ -131,10 +135,10 @@ else
     m('6') = corr2; %20000 - m(2000)
 end;
 
-max_m = max(cell2mat(values(m)));
+max_corr = max([corr0,corr1,corr2,corr5]);
     
-m('123456') = (1 - max_m) * max_m; %m(banknote)
-m('1234567') = (1 - max_m) * (1 - max_m); % m(all)
+m('123456') = (1 - max_corr) * max_corr; %m(banknote)
+m('1234567') = (1 - max_corr) * (1 - max_corr); % m(all)
 
 m_keys = keys(m);
 m_values = cell2mat(values(m));

@@ -23,7 +23,7 @@ end;
 
 x_norm = (-2:.001:2);
 max_norm = max(normpdf(x_norm));
-m_certain = normpdf(relDist, 0, max_norm);
+m_certain = (cos(relDist.*pi/2)+normpdf(relDist,0,max_norm))/2;
 
 %For one input:
 if(relDist < 1)
@@ -38,6 +38,9 @@ if(relDist < 1)
     %m(banknotes, not banknote)
     m('1234567') = (1 - m_certain) * (1 - m_certain);
 else
+    if(m_certain < 0)
+        m_certain = -1 * m_certain;
+    end;
     %m(not banknote)
     m('7') = 1- m_certain;
     %m(banknotes, not banknote)
