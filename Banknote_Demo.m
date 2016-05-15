@@ -1,160 +1,153 @@
 clear all;
 load('keys.mat')
+load('votes_May_24_2015__19_51_37.mat')
 t = [0.5, 0.5, 0.5];
+testLength = 14;
 
-Messages = cell(10,1);
-Corr = zeros(10, 4);
-HalfNumCount = zeros(10, 1);
-P_Complete = zeros(10, 1);
+% Messages = cell(10,1);
+Corr = zeros(testLength, 4);
+HalfNumCount = zeros(testLength, 1);
+P_Complete = zeros(testLength, 1);
 
-RelDistPattern = zeros(10, 1);
-IDsPattern = zeros(10, 1);
+RelDistPattern = zeros(testLength, 1);
+IDsPattern = zeros(testLength, 1);
 
-RelDistColor = zeros(10, 6);
-IDsColor = zeros(10, 6);
-
-%1
-Messages{1} = 'Nem teljesen jól felismerhetõ 500-as fõleg számok szempontjából, minta közepesen felismerhetõ, szín jól felismerhetõ, de másik 2000-es és 10000-es is szóba jöhet';
-Corr(1,:) = [0.1, 0, 0.05, 0.4];
-HalfNumCount(1,:) = 5;
-P_Complete(1,:) = 0.8;
-
-RelDistPattern(1,:) = 0.6;
-IDsPattern(1,:) = 1;
-
-RelDistColor(1,:) = [0.2, 1, 0.4, 1, 0.5, 1];
-IDsColor(1,:) = [1, 2, 3, 4, 5, 6];
-
-%2
-Messages{2} = 'Nem teljesen jól felismerhetõ 500-as, minta szempontjából csak a címer látszik, számok jól felismerhetõk, szín jól felismerhetõ, de 10000-es is szóba jöhet';
-Corr(2,:) = [0.05, 0.05, 0, 0.85];
-HalfNumCount(2,:) = 6;
-P_Complete(2,:) = 1;
-
-RelDistPattern(2,:) = 0.2;
-IDsPattern(2,:) = 123456;
-
-RelDistColor(2,:) = [0.15, 1, 1, 1, 0.45, 1];
-IDsColor(2,:) = [1, 2, 3, 4, 5, 6];
-
-%3
-Messages{3} = 'Rosszul felismerhetõ 500-as, minta szempontjából szinte semmi sem látszik, számok nagyjából felismerhetõk, de 0-val is nagy a korreláció, színre 500-hoz és 2000-hez van viszonylag közel';
-Corr(3,:) = [0.5, 0, 0.05, 0.6];
-HalfNumCount(3,:) = 6;
-P_Complete(3,:) = 0.9;
-
-RelDistPattern(3,:) = 1.5;
-IDsPattern(3,:) = 1;
-
-RelDistColor(3,:) = [0.4, 1.5, 0.4, 1.5, 1.5, 1.5];
-IDsColor(3,:) = [1, 2, 3, 4, 5, 6];
-
-%4
-Messages{4} = 'Nem felismerhetõ 500-as, minta szempontjából semmi sem látszik, számok sem felismerhetõk, színre valamennyire felismeri';
-Corr(4,:) = [0, 0, 0, 0];
-HalfNumCount(4,:) = 0;
-P_Complete(4,:) = 1;
-
-RelDistPattern(4,:) = 1.5;
-IDsPattern(4,:) = 1;
-
-RelDistColor(4,:) = [0.8, 1.5, 1.5, 1.5, 1.5, 1.5];
-IDsColor(4,:) = [1, 2, 3, 4, 5, 6];
-
-%5
-Messages{5} = 'Nem felismerhetõ 2000-es, minta szempontjából semmi sem látszik, számoknál 0-val kezdõdõ, de 5-6 félszámjegyû, színre valamennyire felismeri, de 500-as is lehetne';
-Corr(5,:) = [0.95, 0, 0, 0];
-HalfNumCount(5,:) = 5;
-P_Complete(5,:) = 0.5;
-
-RelDistPattern(5,:) = 1.5;
-IDsPattern(5,:) = 1;
-
-RelDistColor(5,:) = [0.6, 1.5, 0.3, 1.5, 1.5, 1.5];
-IDsColor(5,:) = [1, 2, 3, 4, 5, 6];
-
-%6
-Messages{6} = 'Egyértelmû 2000-es, minta szempontjából közel van, számoknál egyértelmû a számosság, nagyon korrelál 2-sel, de picit 0-val is, színre nagyon közel van 2000-hez';
-Corr(6,:) = [0.2, 0, 1, 0];
-HalfNumCount(6,:) = 8;
-P_Complete(6,:) = 1;
-
-RelDistPattern(6,:) = 0.1;
-IDsPattern(6,:) = 3;
-
-RelDistColor(6,:) = [1, 1.5, 0.05, 1.5, 1.5, 1.5];
-IDsColor(6,:) = [1, 2, 3, 4, 5, 6];
-
-%7
-Messages{7} = 'Nem látunk semmit';
-Corr(7,:) = [0, 0, 0, 0];
-HalfNumCount(7,:) = 0;
-P_Complete(7,:) = 1;
-
-RelDistPattern(7,:) = 1.9;
-IDsPattern(7,:) = 1;
-
-RelDistColor(7,:) = [1.5, 1.5, 1.5, 1.5, 1.5, 1.5];
-IDsColor(7,:) = [1, 2, 3, 4, 5, 6];
+% RelDistColor = zeros(testLength, 6);
+% RelDistColor(1,:) = [0.8, 1, 0.75, 1, 1, 1]; %48
+% RelDistColor(2,:) = [1, 1, 0.9, 1, 1, 1]; %91
+% RelDistColor(3,:) = [1, 1, 1, 1, 0.99, 0.1]; %96
+% RelDistColor(4,:) = [1, 1, 1, 1, 1, 0.6]; %98
+% RelDistColor(5,:) = [0.85, 1, 0.95, 1, 1, 0.95]; %147
+% RelDistColor(6,:) = [1, 0.15, 1, 1, 1, 1]; %169
+% RelDistColor(7,:) = [0.5, 1, 0.8, 1, 1, 1]; %183
+% RelDistColor(8,:) = [0.8, 1, 0.95, 1, 1, 1]; %198
+% RelDistColor(9,:) = [0.95, 1, 1, 1, 1, 1]; %211
+% RelDistColor(10,:) = [0.95, 1, 1, 1, 1, 1]; %214
+% RelDistColor(11,:) = [0.2, 1, 0.8, 1, 1, 1]; %259
+% RelDistColor(12,:) = [1, 0.9, 1, 1, 0.3, 1]; %280
+% RelDistColor(13,:) = [1.5, 1.5, 1, 1, 1, 1]; %282
+% RelDistColor(14,:) = [1, 0.9, 1, 0.9, 0.3, 1]; %303
+% 
+% IDsColor_row = [1,2,3,4,5,6];
+% IDsColor = repmat(IDsColor_row,testLength,1);
 
 
-for i = 1:7
+indices = [48,91,96,98,147,169,183,198,211,214,259,280,282,303];
+
+for i=1:testLength
+    Corr_temp = numberDetails(indices(i), 6:9);
+    Corr_temp(Corr_temp<0) = 0;
+    Corr(i,:) = Corr_temp;
+    HalfNumCount(i,:) = numberDetails(indices(i), 5);
+    %If rightDist > numwidth
+    if numberDetails(indices(i), 3) > numberDetails(indices(i), 4)
+        P_Complete(i,:) = 1;
+    else
+        P_Complete(i,:) = 0;
+    end;
+    
+    notZeroIndex = find(face(indices(i), 2:7));
+    if ~isempty(notZeroIndex)
+        RelDistPattern(i,:) = faceRelDists(indices(i),2);
+        IDsPattern(i,:) = face(indices(i), notZeroIndex(1));
+    else
+        RelDistPattern(i,:) = 1;
+        IDsPattern(i,:) = 7;
+    end;
+    
+end;
+
+
+for i = 5:5
     M_number = NumRecOutput2Mass(Corr(i,:), HalfNumCount(i,:), P_Complete(i,:), t, Keys);
     M_pattern = PatternOutput2Mass(RelDistPattern(i,:), IDsPattern(i,:), Keys);
-    M_color = ColorOutput2Mass(RelDistColor(i,:),IDsColor(i,:),Keys);
+%     M_color = ColorOutput2Mass(RelDistColor(i,:),IDsColor(i,:),Keys);
 
-    tmp1 = GPA(M_color, M_pattern);
-    tmp2 = m_DS(tmp1);
-    tmp3 = GPA(tmp2, M_number);
-    M_combi = m_DS(tmp3);
+    tmp1 = GPA(M_number, M_pattern);
     
-    if(sum(cell2mat(values(M_combi))) ~= 1.0)
-        warning('The sum of the masses is not 1, it is: %d', sum(cell2mat(values(M_combi))))
-        m_values = cell2mat(values(M_combi));
-        m_keys = keys(M_combi);
+    M_ds_tmp1 = m_DS(tmp1);
+%     M_ds_tmp2 = GPA(M_ds_tmp1, M_color);
+    M_ds_combi = M_ds_tmp1;% m_DS(M_ds_tmp2);
+    
+%     M_y_tmp1 = m_Y(tmp1);
+%     M_y_tmp2 = GPA(M_y_tmp1, M_color);
+%     M_y_combi = M_y_tmp1;%m_Y(M_y_tmp2);
+    
+    if(sum(cell2mat(values(M_ds_combi))) ~= 1.0)
+        warning('The sum of the masses is not 1, it is: %d', sum(cell2mat(values(M_ds_combi))))
+        m_values = cell2mat(values(M_ds_combi));
+        m_keys = keys(M_ds_combi);
         m_values = m_values / sum(m_values);
-        M_combi = containers.Map(m_keys,m_values);
+        M_ds_combi = containers.Map(m_keys,m_values);
     end;
+%     if(sum(cell2mat(values(M_y_combi))) ~= 1.0)
+%         warning('The sum of the masses is not 1, it is: %d', sum(cell2mat(values(M_y_combi))))
+%         m_values = cell2mat(values(M_y_combi));
+%         m_keys = keys(M_y_combi);
+%         m_values = m_values / sum(m_values);
+%         M_y_combi = containers.Map(m_keys,m_values);
+%     end;
 
 
-    fprintf('\nEset %s', strcat(num2str(i), ':', Messages{i}));
+    %fprintf('\nEset %s', strcat(num2str(i), ':', Messages{i}));
     fprintf('\n')
-    fprintf('Mass\n')
+    fprintf('Mass ds és yager\n')
     fprintf(' 500      1000     2000     5000     10000    20000    Negative Banknote ALL\n')
-    fprintf('% f', M_combi('1'), M_combi('2'), M_combi('3'), M_combi('4'), M_combi('5'), M_combi('6'), M_combi('7'), M_combi('123456'), M_combi('1234567'))
+    fprintf('% f', M_ds_combi('1'), M_ds_combi('2'), M_ds_combi('3'), M_ds_combi('4'), M_ds_combi('5'), M_ds_combi('6'), M_ds_combi('7'), M_ds_combi('123456'), M_ds_combi('1234567'))
+%     fprintf('\n')
+%     fprintf('% f', M_y_combi('1'), M_y_combi('2'), M_y_combi('3'), M_y_combi('4'), M_y_combi('5'), M_y_combi('6'), M_y_combi('7'), M_y_combi('123456'), M_y_combi('1234567'))
 
-    bel = belief(M_combi);
+    bel_ds = belief(M_ds_combi);
+%     bel_y = belief(M_y_combi);
     fprintf('\n')
-    fprintf('Belief, Plausibility and probability(from plaus and from mass)\n')
+    fprintf('Belief, Plausibility for ds and yager\n')
     fprintf(' 500      1000     2000     5000     10000    20000    Negative\n')
-    fprintf('% f', bel('1'), bel('2'), bel('3'), bel('4'), bel('5'), bel('6'), bel('7'))
-
-    plaus = plausibility(M_combi);
+    fprintf('% f', bel_ds('1'), bel_ds('2'), bel_ds('3'), bel_ds('4'), bel_ds('5'), bel_ds('6'), bel_ds('7'))
+%     fprintf('\n')
+%     fprintf('% f', bel_y('1'), bel_y('2'), bel_y('3'), bel_y('4'), bel_y('5'), bel_y('6'), bel_y('7'))
+    
+    plaus_ds = plausibility(M_ds_combi);
+%     plaus_y = plausibility(M_y_combi);
     fprintf('\n')
-    fprintf('% f', plaus('1'), plaus('2'), plaus('3'), plaus('4'), plaus('5'), plaus('6'), plaus('7'))
+    fprintf('% f', plaus_ds('1'), plaus_ds('2'), plaus_ds('3'), plaus_ds('4'), plaus_ds('5'), plaus_ds('6'), plaus_ds('7'))
+    fprintf('\n')
+%     fprintf('% f', plaus_y('1'), plaus_y('2'), plaus_y('3'), plaus_y('4'), plaus_y('5'), plaus_y('6'), plaus_y('7'))
+%     fprintf('\n')
+    
+    P_pignistic_ds = P_m(M_ds_combi);
+%     P_pignistic_y = P_m(M_y_combi);
+    P_votes = sumVote(indices(i),2:7);
+    fprintf('\n')
+    fprintf('Probability(from mass(ds and yager) and real)\n')
+    fprintf('% f', P_pignistic_ds('1'), P_pignistic_ds('2'), P_pignistic_ds('3'), P_pignistic_ds('4'), P_pignistic_ds('5'), P_pignistic_ds('6'), P_pignistic_ds('7'))
+    fprintf('\n')
+%     fprintf('% f', P_pignistic_y('1'), P_pignistic_y('2'), P_pignistic_y('3'), P_pignistic_y('4'), P_pignistic_y('5'), P_pignistic_y('6'), P_pignistic_y('7'))
+%     fprintf('\n')
+    fprintf('% f', P_votes(1), P_votes(2), P_votes(3), P_votes(4), P_votes(5), P_votes(6))
     fprintf('\n')
     
-    P_pignistic = P_m(M_combi);
-    P_plaus = P_pl(plaus);
-    fprintf('\n')
-    fprintf('% f', P_plaus('1'), P_plaus('2'), P_plaus('3'), P_plaus('4'), P_plaus('5'), P_plaus('6'), P_plaus('7'))
-    fprintf('\n')
-    fprintf('% f', P_pignistic('1'), P_pignistic('2'), P_pignistic('3'), P_pignistic('4'), P_pignistic('5'), P_pignistic('6'), P_pignistic('7'))
-    fprintf('\n')
     
+    ds500 = [M_ds_combi('1'); bel_ds('1'); plaus_ds('1'); P_pignistic_ds('1'); P_votes(1)];
+    ds1000 = [M_ds_combi('2'); bel_ds('2'); plaus_ds('2'); P_pignistic_ds('2'); P_votes(2)];
+    ds2000 = [M_ds_combi('3'); bel_ds('3'); plaus_ds('3'); P_pignistic_ds('3'); P_votes(3)];
+    ds5000 = [M_ds_combi('4'); bel_ds('4'); plaus_ds('4'); P_pignistic_ds('4'); P_votes(4)];
+    ds10000 = [M_ds_combi('5'); bel_ds('5'); plaus_ds('5'); P_pignistic_ds('5'); P_votes(5)];
+    ds20000 = [M_ds_combi('6'); bel_ds('6'); plaus_ds('6'); P_pignistic_ds('6'); P_votes(6)];
+    dsNegative = [M_ds_combi('7'); bel_ds('7'); plaus_ds('7'); P_pignistic_ds('7'); -666];
     
-    o500o = [M_combi('1'); bel('1'); plaus('1'); P_pignistic('1'); P_plaus('1')];
-    o1000o = [M_combi('2'); bel('2'); plaus('2'); P_pignistic('2'); P_plaus('2')];
-    o2000o = [M_combi('3'); bel('3'); plaus('3'); P_pignistic('3'); P_plaus('3')];
-    o5000o = [M_combi('4'); bel('4'); plaus('4'); P_pignistic('4'); P_plaus('4')];
-    o10000o = [M_combi('5'); bel('5'); plaus('5'); P_pignistic('5'); P_plaus('5')];
-    o20000o = [M_combi('6'); bel('6'); plaus('6'); P_pignistic('6'); P_plaus('6')];
-    Negative = [M_combi('7'); bel('7'); plaus('7'); P_pignistic('7'); P_plaus('7')];
-    Banknote = [M_combi('123456'); bel('123456'); plaus('123456'); -666; -666];
-    All = [M_combi('1234567'); bel('1234567'); plaus('1234567'); -666; -666];
+%     y500 = [M_y_combi('1'); bel_y('1'); plaus_y('1'); P_pignistic_y('1'); P_votes(1)];
+%     y1000 = [M_y_combi('2'); bel_y('2'); plaus_y('2'); P_pignistic_y('2'); P_votes(2)];
+%     y2000 = [M_y_combi('3'); bel_y('3'); plaus_y('3'); P_pignistic_y('3'); P_votes(3)];
+%     y5000 = [M_y_combi('4'); bel_y('4'); plaus_y('4'); P_pignistic_y('4'); P_votes(4)];
+%     y10000 = [M_y_combi('5'); bel_y('5'); plaus_y('5'); P_pignistic_y('5'); P_votes(5)];
+%     y20000 = [M_y_combi('6'); bel_y('6'); plaus_y('6'); P_pignistic_y('6'); P_votes(6)];
+%     yNegative = [M_y_combi('7'); bel_y('7'); plaus_y('7'); P_pignistic_y('7'); -666];
     
-    file = strcat('experiment', num2str(i), '.xls');
-    T = table(o500o, o1000o, o2000o, o5000o, o10000o, o20000o, Negative, Banknote, All, 'RowNames', {'Combined mass'; 'Belief'; 'Plausibility'; 'Probability with pignistic transformation'; 'Probability with plausibility transformation'});
+    file_ds = strcat('DS_experiment_2_', num2str(i), '.xls');
+%     file_y = strcat('Y_experiment_2_', num2str(i), '.xls');
+    T_ds = table(ds500, ds1000, ds2000, ds5000, ds10000, ds20000, dsNegative, 'RowNames', {'Combined mass'; 'Belief'; 'Plausibility'; 'Probability with pignistic transformation'; 'Probability from bionic votes'});
+%     T_y = table(y500, y1000, y2000, y5000, y10000, y20000, yNegative, 'RowNames', {'Combined mass'; 'Belief'; 'Plausibility'; 'Probability with pignistic transformation'; 'Probability from bionic votes'});
     
-    writetable(T,file,'WriteRowNames',true)
+    writetable(T_ds,file_ds,'WriteRowNames',true);
+%     writetable(T_y,file_y,'WriteRowNames',true);
 end;
